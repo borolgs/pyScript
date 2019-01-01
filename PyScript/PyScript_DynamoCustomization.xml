@@ -1,0 +1,11 @@
+﻿<?xml version="1.0"?>
+<doc>
+  <assembly>
+    <name>PyScript</name>
+  </assembly>
+  <namespaces>
+    <namespace name="PyScript">
+      <category>PyScript</category>
+    </namespace>
+  </namespaces>
+</doc>
