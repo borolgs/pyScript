@@ -23,6 +23,9 @@ folder/
           return 'Hello World!'
 ```
 
+![Nodes](docs/images/nodes.png)
+![Player](docs/images/player.png)
+
 ## Зачем
 
 Код нужно писать с чувством собственного достоинства (IDE) а не в блокноте.
