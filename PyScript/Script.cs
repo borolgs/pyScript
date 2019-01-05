@@ -67,7 +67,8 @@ namespace PyScript
             }
             catch (Exception e)
             {
-                output["output"] = e.Message.ToString() + e.StackTrace.ToString();
+                string message = engine.GetService<ExceptionOperations>().FormatException(e);
+                output["output"] = message;
                 return output;
             }
 
