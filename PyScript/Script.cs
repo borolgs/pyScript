@@ -1,16 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.IO;
 
-using Dynamo.Core;
-using Dynamo.Applications;
 using Autodesk.DesignScript.Runtime;
-using RevitServices;
-
-using IronPython.Runtime.Exceptions;
+using Dynamo.Applications;
 using IronPython.Hosting;
 using Microsoft.Scripting.Hosting;
 
@@ -20,16 +14,27 @@ namespace PyScript
     {
         private Script() { }
 
-        public static string Execute()
+        /// <summary>
+        /// Running a python script with the same name as the workspace.
+        /// </summary>
+        /// <returns>The script output. </returns>
+        /// <search>python,script,code</search>
+        [MultiReturn(new[] { "output" })]
+        public static Dictionary<string, string> Execute()
         {
+            var output = new Dictionary<string, string>
+            {
+                {"output", "" }
+            };
+
             // Workspace file
             var model = DynamoRevit.RevitDynamoModel;
             Dynamo.Graph.Workspaces.WorkspaceModel ws = model.CurrentWorkspace;
             string workspacePath = ws.FileName;
-            // string workspacePath = "E:/Users/olal/Desktop/test/PyScriptTest.dyn";
             if (workspacePath == "")
             {
-                return "File has not been saved yet.";
+                output["output"] = "File has not been saved yet.";
+                return output;
             }
 
             // Script file
@@ -39,7 +44,8 @@ namespace PyScript
             scriptPath += ".py";
             if (!File.Exists(scriptPath))
             {
-                return "Script file does not exists.";
+                output["output"] = "Script file does not exists.";
+                return output;
             }
 
             ScriptEngine engine = Python.CreateEngine();
@@ -61,10 +67,12 @@ namespace PyScript
             }
             catch (Exception e)
             {
-                return e.Message.ToString() + e.StackTrace.ToString();
+                output["output"] = e.Message.ToString() + e.StackTrace.ToString();
+                return output;
             }
 
-            return Encoding.Default.GetString(streamOut.ToArray());
+            output["output"] = Encoding.Default.GetString(streamOut.ToArray());
+            return output;
         }
     }
 }

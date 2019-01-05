@@ -3,7 +3,7 @@ Simple Zero Touch Node to run python scripts in a dynamo player (http://dynamobi
 
 Использование dynamo player'a как менеджера python скриптов.
 
-Очень упрощенная вариация на тему [Revit Python Shell](https://github.com/architecture-building-systems/revitpythonshell)'a или [pyReivt](https://eirannejad.github.io/pyRevit/whatspyrevit/)'a.
+Очень упрощенная вариация на тему [Revit Python Shell](https://github.com/architecture-building-systems/revitpythonshell)'a или [pyRevit](https://eirannejad.github.io/pyRevit/whatspyrevit/)'a.
 
 ## Как работает
 
