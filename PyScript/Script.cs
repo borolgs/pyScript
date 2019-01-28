@@ -39,6 +39,7 @@ namespace PyScript
 
             // Script file
             string dir = Path.GetDirectoryName(workspacePath);
+            string parentDir = Directory.GetParent(dir).FullName;
             string filename = Path.GetFileNameWithoutExtension(workspacePath);
             string scriptPath = Path.Combine(dir, filename);
             scriptPath += ".py";
@@ -54,6 +55,7 @@ namespace PyScript
             // Search paths
             var paths = engine.GetSearchPaths();
             paths.Add(dir);
+            paths.Add(parentDir);
             engine.SetSearchPaths(paths);
 
             // Output
@@ -68,7 +70,7 @@ namespace PyScript
             catch (Exception e)
             {
                 string message = engine.GetService<ExceptionOperations>().FormatException(e);
-                output["output"] = message;
+                output["output"] = Encoding.Default.GetString(streamOut.ToArray()) + message;
                 return output;
             }
 
