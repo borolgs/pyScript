@@ -3,12 +3,18 @@ using System.Collections.Generic;
 using System.Text;
 using System.IO;
 
+using Autodesk.Revit.DB;
+using Revit.Elements;
+using Revit.GeometryConversion;
+
+using Autodesk.DesignScript.Geometry;
 using Autodesk.DesignScript.Runtime;
 using Dynamo.Applications;
 using IronPython.Hosting;
 using Microsoft.Scripting.Hosting;
+using Dynamo.Graph.Nodes;
 
-namespace PyScript
+namespace PyScript13
 {
     public class Script
     {
@@ -19,12 +25,13 @@ namespace PyScript
         /// </summary>
         /// <returns>The script output. </returns>
         /// <search>python,script,code</search>
-        [MultiReturn(new[] { "output" })]
-        public static Dictionary<string, string> Execute()
+        [MultiReturn(new[] { "output", "OUT" })]
+        public static Dictionary<string, object> Execute()
         {
-            var output = new Dictionary<string, string>
+            var output = new Dictionary<string, object>
             {
-                {"output", "" }
+                {"output", "" },
+                {"OUT", null }
             };
 
             // Workspace file
@@ -52,6 +59,10 @@ namespace PyScript
             ScriptEngine engine = Python.CreateEngine();
             ScriptScope scope = engine.CreateScope();
 
+            // Variables
+            scope.SetVariable("Convert", new Convert());
+            scope.SetVariable("workspace_dir", dir);
+
             // Search paths
             var paths = engine.GetSearchPaths();
             paths.Add(dir);
@@ -75,7 +86,36 @@ namespace PyScript
             }
 
             output["output"] = Encoding.Default.GetString(streamOut.ToArray());
+
+            if (scope.ContainsVariable("OUT"))
+            {
+                output["OUT"] = scope.GetVariable("OUT");
+            }
+
             return output;
+
+
         }
+
+        [IsVisibleInDynamoLibrary(false)]
+        public class Convert
+        {
+
+            public Autodesk.DesignScript.Geometry.Point ToPoint(XYZ p)
+            {
+                return p.ToPoint();
+            }
+
+            public Autodesk.DesignScript.Geometry.Solid ToSolid(Autodesk.Revit.DB.Solid e)
+            {
+                return e.ToProtoType();
+            }
+
+            public IEnumerable<Autodesk.DesignScript.Geometry.Surface> ToSurface(Autodesk.Revit.DB.Face e)
+            {
+                return e.ToProtoType();
+            }
+        }
+
     }
 }
