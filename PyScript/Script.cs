@@ -14,26 +14,33 @@ using IronPython.Hosting;
 using Microsoft.Scripting.Hosting;
 using Dynamo.Graph.Nodes;
 
-namespace PyScript13
+using CoreNodeModels;
+using Dynamo.Utilities;
+using ProtoCore.AST.AssociativeAST;
+using Newtonsoft.Json;
+
+namespace PyScript
 {
     public class Script
     {
-        private Script() { }
+        private Script() {}
 
         /// <summary>
         /// Running a python script with the same name as the workspace.
         /// </summary>
+        /// <param name="IN">A list of inputs.</param>
         /// <returns>The script output. </returns>
         /// <search>python,script,code</search>
         [MultiReturn(new[] { "output", "OUT" })]
-        public static Dictionary<string, object> Execute()
+
+        public static Dictionary<string, object> Execute([DefaultArgument("{}")] List<object> IN)
         {
+            //if (IN == default(List<object>)) IN = new List<object>();
             var output = new Dictionary<string, object>
             {
                 {"output", "" },
                 {"OUT", null }
             };
-
             // Workspace file
             var model = DynamoRevit.RevitDynamoModel;
             Dynamo.Graph.Workspaces.WorkspaceModel ws = model.CurrentWorkspace;
@@ -41,6 +48,11 @@ namespace PyScript13
             if (workspacePath == "")
             {
                 output["output"] = "File has not been saved yet.";
+                return output;
+            }
+            if (!IsOnlyOneScriptNode())
+            {
+                output["output"] = "There can be only one Script.Execute.";
                 return output;
             }
 
@@ -60,6 +72,8 @@ namespace PyScript13
             ScriptScope scope = engine.CreateScope();
 
             // Variables
+            var a = System.Reflection.MethodBase.GetCurrentMethod();
+            scope.SetVariable("IN", IN);
             scope.SetVariable("Convert", new Convert());
             scope.SetVariable("workspace_dir", dir);
 
@@ -93,8 +107,31 @@ namespace PyScript13
             }
 
             return output;
-
-
+        }
+        //IEnumerable<NodeModel>
+        private static bool IsOnlyOneScriptNode()
+        {
+            var model = DynamoRevit.RevitDynamoModel;
+            Dynamo.Graph.Workspaces.WorkspaceModel ws = model.CurrentWorkspace;
+            int scriptNodeCount = 0;
+  
+            foreach (NodeModel node in ws.Nodes)
+            {
+                if (node.CreationName == "PyScript.Script.Execute@var[]")
+                {
+                    if(scriptNodeCount < 1)
+                    {
+                        node.MarkNodeAsModified(true);
+                    }
+                    scriptNodeCount += 1;
+                }
+            }
+            if (scriptNodeCount > 1)
+            {
+                return false;
+            }
+            
+            return true;
         }
 
         [IsVisibleInDynamoLibrary(false)]
@@ -116,6 +153,6 @@ namespace PyScript13
                 return e.ToProtoType();
             }
         }
-
     }
+
 }
