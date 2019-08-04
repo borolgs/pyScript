@@ -11,19 +11,21 @@ using Autodesk.DesignScript.Geometry;
 using Autodesk.DesignScript.Runtime;
 using Dynamo.Applications;
 using IronPython.Hosting;
+using IronPython.Compiler;
+using IronPython.Runtime;
 using Microsoft.Scripting.Hosting;
 using Dynamo.Graph.Nodes;
 
-using CoreNodeModels;
-using Dynamo.Utilities;
-using ProtoCore.AST.AssociativeAST;
-using Newtonsoft.Json;
+//using CoreNodeModels;
+//using Dynamo.Utilities;
+//using ProtoCore.AST.AssociativeAST;
+//using Newtonsoft.Json;
 
 namespace PyScript
 {
     public class Script
     {
-        private Script() {}
+        private Script() { }
 
         /// <summary>
         /// Running a python script with the same name as the workspace.
@@ -72,10 +74,13 @@ namespace PyScript
             ScriptScope scope = engine.CreateScope();
 
             // Variables
-            var a = System.Reflection.MethodBase.GetCurrentMethod();
             scope.SetVariable("IN", IN);
             scope.SetVariable("Convert", new Convert());
-            scope.SetVariable("workspace_dir", dir);
+            scope.SetVariable("__workspace_dir__", dir);
+
+            PythonCompilerOptions pco = (PythonCompilerOptions)engine.GetCompilerOptions(scope);
+            pco.ModuleName = "__main__";
+            pco.Module |= ModuleOptions.Initialize;
 
             // Search paths
             var paths = engine.GetSearchPaths();
@@ -90,7 +95,11 @@ namespace PyScript
 
             try
             {
-                engine.ExecuteFile(scriptPath, scope);
+                // engine.ExecuteFile(scriptPath, scope);
+                ScriptSource source = engine.CreateScriptSourceFromFile(scriptPath);
+                CompiledCode compiled = source.Compile(pco);
+                compiled.Execute(scope);
+
             }
             catch (Exception e)
             {
@@ -114,12 +123,12 @@ namespace PyScript
             var model = DynamoRevit.RevitDynamoModel;
             Dynamo.Graph.Workspaces.WorkspaceModel ws = model.CurrentWorkspace;
             int scriptNodeCount = 0;
-  
+
             foreach (NodeModel node in ws.Nodes)
             {
                 if (node.CreationName == "PyScript.Script.Execute@var[]")
                 {
-                    if(scriptNodeCount < 1)
+                    if (scriptNodeCount < 1)
                     {
                         node.MarkNodeAsModified(true);
                     }
@@ -130,7 +139,7 @@ namespace PyScript
             {
                 return false;
             }
-            
+
             return true;
         }
 

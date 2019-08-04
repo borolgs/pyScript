@@ -32,14 +32,6 @@
     <DocumentationFile>bin\Release\PyScript.xml</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="CoreNodeModels, Version=2.0.2.6986, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\DynamoVisualProgramming.WpfUILibrary.2.0.2.6986\lib\net45\CoreNodeModels.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="CoreNodeModelsWpf, Version=2.0.2.6986, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\DynamoVisualProgramming.WpfUILibrary.2.0.2.6986\lib\net45\CoreNodeModelsWpf.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
     <Reference Include="DesignScriptBuiltin, Version=2.0.2.6986, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\DynamoVisualProgramming.Core.2.0.2.6986\lib\net45\DesignScriptBuiltin.dll</HintPath>
       <Private>False</Private>
@@ -56,20 +48,12 @@
       <HintPath>..\packages\DynamoVisualProgramming.Core.2.0.2.6986\lib\net45\DynamoCore.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="DynamoCoreWpf, Version=2.0.2.6986, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\DynamoVisualProgramming.WpfUILibrary.2.0.2.6986\lib\net45\DynamoCoreWpf.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
     <Reference Include="DynamoInstallDetective, Version=2.0.2.6986, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\DynamoVisualProgramming.Core.2.0.2.6986\lib\net45\DynamoInstallDetective.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="DynamoRaaSHelper">
-      <HintPath>C:\Program Files\Dyna\Dynamo Revit\2\Revit_2018\DynamoRaaSHelper.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
     <Reference Include="DynamoRevitDS">
-      <HintPath>C:\Program Files\Dyna\Dynamo Revit\2\Revit_2018\DynamoRevitDS.dll</HintPath>
+      <HintPath>..\..\..\..\..\Program Files\Dynamo\Dynamo Revit\2\Revit_2018\DynamoRevitDS.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="DynamoServices, Version=2.0.2.6986, Culture=neutral, processorArchitecture=MSIL">
@@ -137,19 +121,19 @@
       <Private>False</Private>
     </Reference>
     <Reference Include="RevitAPI">
-      <HintPath>C:\Program Files\Autodesk\Revit 2018\RevitAPI.dll</HintPath>
+      <HintPath>..\..\..\..\..\Program Files\Autodesk\Revit 2018\RevitAPI.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="RevitAPIUI">
-      <HintPath>C:\Program Files\Autodesk\Revit 2018\RevitAPIUI.dll</HintPath>
+      <HintPath>..\..\..\..\..\Program Files\Autodesk\Revit 2018\RevitAPIUI.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="RevitNodes">
-      <HintPath>C:\Program Files\Dyna\Dynamo Revit\2\Revit_2018\RevitNodes.dll</HintPath>
+      <HintPath>..\..\..\..\..\Program Files\Dynamo\Dynamo Revit\2\Revit_2018\RevitNodes.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="RevitServices">
-      <HintPath>C:\Program Files\Dyna\Dynamo Revit\2\Revit_2018\RevitServices.dll</HintPath>
+      <HintPath>..\..\..\..\..\Program Files\Dynamo\Dynamo Revit\2\Revit_2018\RevitServices.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="System">
